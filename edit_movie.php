@@ -27,10 +27,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $movie_name = $_POST['movie_name'];
     $genre = $_POST['genre'];
     $release_date = $_POST['release_date'];
-    // $update_movie_obj->update_movie($movie_id, $_POST);
-    // header("Location: movie_list.php");
-    // exit;
-
     // Update movie in database
     if ($update_movie_obj->update_movie($movie_id, $_POST)) {
         $_SESSION['success_message'] = "Movie updated successfully!";
@@ -39,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $_SESSION['error_message'] = "Failed to update movie!";
         header("Location: movie_list.php");
-        // Optionally, you can redirect back to edit form with error message
+        // you can redirect back to edit form with error message
         // header("Location: edit_movie.php?movie_id=" . $movie_id);
         // exit;
     }
