@@ -76,7 +76,9 @@ if (isset($_POST['submit_rating'])){
                     while($row = mysqli_fetch_assoc($show_movie)){
                         $sl_no++;
                         // Get average rating for each movie
-                        $avg_rating = $Ratings_obj->get_average_rating($row['id']);
+                        $avg_data = $Ratings_obj->get_average_rating($row['id']);
+                        $avg_rating = $avg_data['average_rating'];
+                        $rating_count = $avg_data['rating_count'];
             ?>
             <form method="post" action="movie_list.php">
                 <tr>
@@ -84,7 +86,7 @@ if (isset($_POST['submit_rating'])){
                     <td><?php echo $row['movie_name'];?></td>
                     <td><?php echo $row['genre'];?></td>
                     <td><?php echo $row['release_date'];?></td>
-                    <td><?php echo number_format($avg_rating, 2)."*(4)"; ?></td>
+                    <td><?php echo number_format($avg_rating, 2)."*({$rating_count})"; ?></td>
                     <td>
                         <input type="hidden" name="movie_name" value="<?php echo $row['movie_name'];?>">
                         <input type="number" class="form-control custom_select" name="rating" placeholder="Rating" min="0" max="5" step="0.1">

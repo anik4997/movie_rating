@@ -58,7 +58,7 @@ class Ratings{
 
     // Average movie rating
     public function get_average_rating($movie_id) {
-        $avg_rating_query = "SELECT AVG(rating) AS avg_rating FROM ratings WHERE movie_id = ?";
+        $avg_rating_query = "SELECT AVG(rating) AS avg_rating, COUNT(*) AS rating_count FROM ratings WHERE movie_id = ?";
         $params = ["i", $movie_id]; 
     
         $result = $this->obj->prepareAndExecute($avg_rating_query, $params);
@@ -66,9 +66,11 @@ class Ratings{
         // Fetch the row
         $row = $result->fetch_assoc();
     
-        // Get the average rating
+        // Get the average rating and rating count
         $avg_rating = $row['avg_rating'] ?? 0; // Default average rating if no result
+        $rating_count = $row['rating_count'] ?? 0; // Default rating count if no result
     
-        return $avg_rating;
+        return ['average_rating' => $avg_rating, 'rating_count' => $rating_count];
     }
+    
 }
