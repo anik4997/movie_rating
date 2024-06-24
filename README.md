@@ -17,8 +17,10 @@ PHP 7.x or higher
 MySQL 5.x or higher
 Web server (e.g., Apache, Nginx)
 Steps
-1. Clone the repository: git clone https://github.com/your-username/movie-rating-system.git
-2. Navigate to the project directory: cd movie-rating-system
+1. Clone the repository:
+  git clone https://github.com/your-username/movie-rating-system.git
+2. Navigate to the project directory:
+   cd movie-rating-system
 3. Import the database:
 Create a MySQL database.
 Import the SQL file located at database/movie_rating_system.sql into your database.
