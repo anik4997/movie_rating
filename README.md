@@ -75,6 +75,7 @@ The Movie Rating System is a web application that allows users to view a list of
 - Admins can edit or delete existing movies by clicking the respective buttons on the movie list page.
 
 Project Structure
+```bash
 movie-rating-system/
 │
 ├── classes/
@@ -98,7 +99,7 @@ movie-rating-system/
 ├── search.php                 // Page for handling search results
 │
 └── README.md                  // This README file
-
+```
 
 
 ## Acknowledgements
