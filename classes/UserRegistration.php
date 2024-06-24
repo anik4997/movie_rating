@@ -51,8 +51,9 @@ class UserRegistration{
         } elseif ($phone_exists) {
             echo 'This phone number already exists';
         } else {
+            $role = isset($data['role']) ? 1 :0;
             // Insert query
-            $insert_query = "INSERT INTO user (name, phone, email, password) VALUES ('$this->user_name', '$this->user_phone', '$this->user_email', '$this->hashed_password')";
+            $insert_query = "INSERT INTO user (name, phone, email, password, role) VALUES ('$this->user_name', '$this->user_phone', '$this->user_email', '$this->hashed_password', '$role')";
             $insert_query_connection = $this->obj->insert($insert_query); // This method is from database.php file
     
             if ($insert_query_connection) {

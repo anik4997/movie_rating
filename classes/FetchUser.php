@@ -15,4 +15,10 @@ class FetchUser{
         $select_alluserdata_connection = $this->obj->select_user_connection($select_alluserdata);
         return $select_alluserdata_connection;
     }
+        public function get_user_by_id($user_id) {
+            $query = "SELECT * FROM user WHERE id = ?";
+            $stmt = $this->obj->prepareAndExecute($query, ["i", $user_id]);
+            return $stmt->fetch_assoc();
+        }
+    
 }

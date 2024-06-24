@@ -57,7 +57,6 @@ if (isset($_POST['submit'])) {
   <div class="card">
     <div class="card-body login-card-body">
       <p class="login-box-msg">Sign in to start your session</p>
-
       <form action="" method="post">
         <div class="input-group mb-3">
           <input type="email" class="form-control" placeholder="Email" name="email">
@@ -92,6 +91,9 @@ if (isset($_POST['submit'])) {
           </div>
           <p class="mt-2">
             <a href="add_user.php" class="text-center">Register a new membership</a>
+          </p>
+          <p class="mt-2">
+            <a href="movie_list_guest.php" class="text-center">Click to see the movie list</a>
           </p>
           <!-- /.col -->
         </div>

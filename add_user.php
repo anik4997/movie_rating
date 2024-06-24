@@ -35,7 +35,7 @@ if (isset($_POST['submit'])){
 
       <form action="" method="post">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Full name" name="name">
+          <input type="text" class="form-control" placeholder="Full name" name="name" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
@@ -43,7 +43,7 @@ if (isset($_POST['submit'])){
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="number" class="form-control" name="phone" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Your phone no">
+          <input type="number" class="form-control" name="phone" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Your phone no" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-phone"></span>
@@ -51,7 +51,7 @@ if (isset($_POST['submit'])){
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Email" name="email">
+          <input type="email" class="form-control" placeholder="Email" name="email" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -59,7 +59,7 @@ if (isset($_POST['submit'])){
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password" name="password">
+          <input type="password" class="form-control" placeholder="Password" name="password" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -75,14 +75,16 @@ if (isset($_POST['submit'])){
           </div>
         </div> -->
         <div class="row">
-          <!-- <div class="col-8">
+          <div class="col-8">
             <div class="icheck-primary">
-              <input type="checkbox" id="agreeTerms" name="terms" value="agree">
+              <!-- <input type="checkbox" id="agreeTerms" name="terms" value="1">
               <label for="agreeTerms">
                I agree to the <a href="#">terms</a>
-              </label>
+              </label> -->
+              <input type="checkbox" id="agreeTerms" name="role" value="1">
+              <label for="agreeTerms">Click if you are an admin</label>
             </div>
-          </div> -->
+          </div>
           <!-- /.col -->
           <div class="col-4">
             <button type="submit" class="btn btn-primary btn-block" name="submit">Register</button>
