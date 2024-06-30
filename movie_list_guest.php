@@ -1,8 +1,18 @@
 <?php
 require_once 'classes/Ratings.php';
 require_once 'classes/FetchMovie.php';
-// Creating objects for rating class
+require_once 'classes/Search.php';
+
+// Creating objects for rating class and search class
 $Ratings_obj = new Ratings();
+$search_obj = new Search();
+
+// Check if search form is submitted
+$search_result = null;
+if (isset($_POST['search'])) {
+    $search_result = $search_obj->movie_search($_POST);
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,8 +29,8 @@ $Ratings_obj = new Ratings();
             <h2 class="d-inline">List of movies:</h2>
         </div>
         <div class="col-md-7">
-            <form action="search.php" class="mb-5 search_form d-flex justify-content-end" method="post">
-                <input type="text" class="form-control search_field" name="search_input" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="search">
+            <form action="movie_list_guest.php" class="mb-5 search_form d-flex justify-content-end" method="post">
+                <input type="text" class="form-control search_field" name="search_input" placeholder="search">
                 <button type="submit" class="btn btn-dark" name="search">Search</button>
             </form>
         </div>
@@ -39,12 +49,26 @@ $Ratings_obj = new Ratings();
         </thead>
         <tbody>
             <?php
-                $fetch_movie_obj = new FetchMovie();
-                $show_movie = $fetch_movie_obj->show_movie();
-                if ($show_movie){
+                $movies = [];
+                if ($search_result) {
+                    // Fetch data from search results
+                    while ($row = mysqli_fetch_assoc($search_result)) {
+                        $movies[] = $row;
+                    }
+                } else {
+                    // Fetch all movies if no search input
+                    $fetch_movie_obj = new FetchMovie();
+                    $show_movie = $fetch_movie_obj->show_movie();
+                    if ($show_movie) {
+                        while($row = mysqli_fetch_assoc($show_movie)){
+                            $movies[] = $row;
+                        }
+                    }
+                }
+
+                if (!empty($movies)) {
                     $sl_no = 0;
-                    // while loop for fetching data from database
-                    while($row = mysqli_fetch_assoc($show_movie)){
+                    foreach ($movies as $row) {
                         $sl_no++;
                         // Get average rating for each movie
                         $avg_data = $Ratings_obj->get_average_rating($row['id']);
@@ -61,15 +85,17 @@ $Ratings_obj = new Ratings();
                         <input type="number" class="form-control custom_select" name="rating" placeholder="Rating" min="0" max="5" step="0.1">
                         <a href="#" class="btn btn-success" onclick="login_alert(event)">Submit rating</a>
                         <script>
-                                function login_alert(event) {
-                                    event.preventDefault(); 
-                                    alert("You must login to perform this action");
-                                }
+                            function login_alert(event) {
+                                event.preventDefault(); 
+                                alert("You must login to perform this action");
+                            }
                         </script>
                     </td>
                 </tr>
             <?php
                     }
+                } else {
+                    echo "<tr><td colspan='6'>No movies found</td></tr>";
                 }
             ?>
         </tbody>

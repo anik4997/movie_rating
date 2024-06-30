@@ -3,6 +3,8 @@ session_start();
 require_once 'classes/Ratings.php';
 require_once 'classes/FetchMovie.php';
 require_once 'classes/FetchUser.php';
+require_once 'classes/Search.php';
+
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: index.php");
@@ -14,9 +16,11 @@ $user_id = $_SESSION['user_id'];
 
 // Creating objects for rating class and passing the super global variable $_POST
 $Ratings_obj = new Ratings();
-// Passing superglobal variable POST
+$search_obj = new Search();
+
+// Handle movie rating submission
 if (isset($_POST['submit_rating'])){
-    $_POST['user_id'] = $user_id; 
+    $_POST['user_id'] = $user_id;
     $add_user_rating = $Ratings_obj->movie_rating($_POST);
 }
 
@@ -24,7 +28,17 @@ if (isset($_POST['submit_rating'])){
 $fetch_user_obj = new FetchUser();
 $current_user = $fetch_user_obj->get_user_by_id($user_id);
 $is_admin = $current_user['role'] == 1;
+
+// Handle movie search
+$search_result = null;
+if (isset($_POST['search'])) {
+    $search_result = $search_obj->movie_search($_POST);
+}
+
+// Fetch movies if no search result
+$movies = $search_result ? $search_result : (new FetchMovie())->show_movie();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,8 +54,8 @@ $is_admin = $current_user['role'] == 1;
             <h2 class="d-inline">List of movies:</h2>
         </div>
         <div class="col-md-7">
-            <form action="search.php" class="mb-5 search_form d-flex justify-content-end" method="post">
-                <input type="text" class="form-control search_field" name="search_input" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="search">
+            <form action="movie_list.php" class="mb-5 search_form d-flex justify-content-end" method="post">
+                <input type="text" class="form-control search_field" name="search_input" placeholder="search">
                 <button type="submit" class="btn btn-dark" name="search">Search</button>
             </form>
         </div>
@@ -63,7 +77,6 @@ $is_admin = $current_user['role'] == 1;
         </div>
     <?php endif; ?>
 
-    
     <table class="table table-bordered">
         <thead class="thead-dark">
             <tr>
@@ -78,14 +91,10 @@ $is_admin = $current_user['role'] == 1;
         </thead>
         <tbody>
             <?php
-                $fetch_movie_obj = new FetchMovie();
-                $show_movie = $fetch_movie_obj->show_movie();
-                if ($show_movie){
+                if ($movies){
                     $sl_no = 0;
-                    // while loop for fetching data from database
-                    while($row = mysqli_fetch_assoc($show_movie)){
+                    while($row = mysqli_fetch_assoc($movies)){
                         $sl_no++;
-                        // Get average rating for each movie
                         $avg_data = $Ratings_obj->get_average_rating($row['id']);
                         $avg_rating = $avg_data['average_rating'];
                         $rating_count = $avg_data['rating_count'];
@@ -121,6 +130,8 @@ $is_admin = $current_user['role'] == 1;
             </form>
             <?php
                     }
+                } else {
+                    echo "<tr><td colspan='6'>No movies found</td></tr>";
                 }
             ?>
         </tbody>
@@ -129,6 +140,6 @@ $is_admin = $current_user['role'] == 1;
     <a href="logout.php"><button type="submit" class="btn btn-danger">Logout</button></a>
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </body>
 </html>
